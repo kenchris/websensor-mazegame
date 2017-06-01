@@ -90,7 +90,7 @@ function move()        //Moves the ball
         }
         if(shakingvar == 10)    //shake event
         {
-                print("SHAKE"):
+                console.log("SHAKE");
                 shakingvar = 0;
         }
         //filter noise
