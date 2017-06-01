@@ -180,8 +180,8 @@ function update_text()
 function move()        //Moves the ball
 {
         //Simulate friction
-        dx = dx/0.98
-        dy = dy/0.98
+        dx = dx/1.02
+        dy = dy/1.02
         //y axis
         if(y + dy < HEIGHT && y + dy > 0)
         {
