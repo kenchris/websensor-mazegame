@@ -67,8 +67,8 @@ init();
 function move()        //Moves the ball
 {
         //Simulate friction
-        dx = dx/(1.01)
-        dy = dy/(1.01)
+        dx = dx/1.01
+        dy = dy/1.01
         //y axis
         if(y + dy < HEIGHT && y + dy > 0)
         {
@@ -104,7 +104,7 @@ function startSensors() {
                         //remove noise
                         if(Math.abs(gravity.x) > 0.1)
                         {    
-                                        dx = -45.0 * gravity['x'];
+                                        dx = -0.45 * gravity['x'];
                         }     
                         if(Math.abs(gravity.y) > 0.1)
                         {            
