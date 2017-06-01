@@ -1,7 +1,7 @@
 var sensors = {};
 var accel = {x:null, y:null, z:null};
 var accelNoG;
-var sensorfreq = 60;     //for setting desired sensor frequency
+var sensorfreq = 30;     //for setting desired sensor frequency
 var sensors_started = false;
 
 
