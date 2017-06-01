@@ -222,8 +222,15 @@ function startSensors() {
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                         gravity.update(accel);
                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-                        dx = -gravity['x']/2;                        
-                        dy = gravity['y']/2;
+                        //remove noise
+                        if(Math.abs(accelNoG.x > 0.1))
+                        {
+                                dx = -gravity['x']/2;
+                        }     
+                        if(Math.abs(accelNoG.y > 0.1))
+                        {              
+                                dy = gravity['y']/2;
+                        }
                         console.log(dx, dy, x, y)
                 }
                 accelerometer.onerror = err => {
