@@ -165,12 +165,15 @@ return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z
 
 function update_text()
 {
+        if(velGyro)
+        {
                         //document.getElementById("accl").textContent = `Acceleration ${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: ${magnitude(accel).toFixed(3)}`;
                         //document.getElementById("accl_nog").textContent = `Acceleration without gravity ${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: ${magnitude(accelNoG).toFixed(3)}`;
                         //document.getElementById("g_accl").textContent = `Isolated gravity ${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
                         //document.getElementById("ori").textContent = `Orientation matrix ${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]} ...`;
                         document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: ${magnitude(velGyro).toFixed(3)}`;
                         document.getElementById("sensorfreq").textContent = `Sensor frequency ${sensorfreq}`;
+        }
 }
 
 function stop_sensors()
