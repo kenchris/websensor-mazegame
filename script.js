@@ -96,7 +96,7 @@ function startSensors() {
                 accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
                 //accelerometer = new GravitySensor({frequency: sensorfreq})
                 sensors.Accelerometer = accelerometer;
-                gravity =  new LowPassFilterData(accelerometer, 0.5);   //need to find good bias value
+                gravity =  new LowPassFilterData(accelerometer, 0.3);   //need to find good bias value
                 accelerometer.onchange = event => {
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                         gravity.update(accel);
@@ -104,11 +104,11 @@ function startSensors() {
                         //remove noise
                         if(Math.abs(accelNoG.x > 0.1))
                         {
-                                dx = dx - gravity['x']/2;
+                                dx = -1.2 * gravity['x'];
                         }     
                         if(Math.abs(accelNoG.y > 0.1))
                         {              
-                                dy = dy + gravity['y']/2;
+                                dy = -1.2 * gravity['y'];
                         }
                         console.log(dx, dy, x, y)
                 }
