@@ -21,6 +21,7 @@ var nosensors = false;  //for testing with fake values and without sensors
 var sensors_started = false;
 
 var textUpdate = setInterval(update_text, 1000/sensorfreq);
+var moveUpdate = setInterval(move, 1000/sensorfreq);
 
 var canvas;
 var ctx;
