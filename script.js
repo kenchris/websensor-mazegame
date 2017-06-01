@@ -179,12 +179,22 @@ function update_text()
 
 function move()        //Moves the ball
 {
-        if (y + dy < HEIGHT ){
+        //y axis
+        if (y + dy < HEIGHT && y - dy > 0){
                 y += dy;
                 clear();
                 checkcollision();
                 if (collision == 1){
                         y -= dy;
+                        collision = 0;
+                }
+        }
+        if ((x + dx < WIDTH && x - dx > 0)){
+                x += dx;
+                clear();
+                checkcollision();
+                if (collision == 1){
+                        x -= dx;
                         collision = 0;
                 }
         }
@@ -234,8 +244,8 @@ function startSensors() {
                 sensors.Gyroscope = gyroscope;
                 gyroscope.onchange = event => {
                         velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
-                        dx = velGyro['x'];                        
-                        dy = velGyro['y'];
+                        dx = dx + velGyro['x'];                        
+                        dy = dy + velGyro['y'];
                 }
                 gyroscope.onerror = err => {
                   gyroscope = null;
