@@ -180,6 +180,8 @@ function update_text()
 function move()        //Moves the ball
 {
         //y axis
+        if(y + dy > HEIGHT && y + dy > 0)
+        {
                 y += dy;
                 clear();
                 //checkcollision();
@@ -187,6 +189,7 @@ function move()        //Moves the ball
                         y -= dy;
                         collision = 0;
                 }
+        }
                 x += dx;
                 clear();
                 //checkcollision();
@@ -216,8 +219,8 @@ function startSensors() {
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                         gravity.update(accel);
                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-                        dx = gravity['x'];                        
-                        dy = gravity['y'];
+                        dx = -gravity['x']/2;                        
+                        dy = gravity['y']/2;
                         console.log(dx, dy, x, y)
                 }
                 accelerometer.onerror = err => {
