@@ -244,8 +244,8 @@ function startSensors() {
                 sensors.Gyroscope = gyroscope;
                 gyroscope.onchange = event => {
                         velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
-                        dx = dx + velGyro['x'];                        
-                        dy = dy + velGyro['y'];
+                        dx = velGyro['x'];                        
+                        dy = velGyro['y'];
                 }
                 gyroscope.onerror = err => {
                   gyroscope = null;
