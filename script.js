@@ -60,7 +60,7 @@ canvas = document.getElementById("canvas");
 ctx = canvas.getContext("2d");
 img.src = "maze2.gif";
 startSensors();
-return setInterval(draw, 5);
+return requestAnimationFrame(draw);
 }
 
 //Use gravity sensor to control (positive x down, negative x up)
@@ -126,6 +126,7 @@ function draw() {
 clear();
 ctx.fillStyle = "purple";
 rect(x, y, 15,15);
+requestAnimationFrame(draw);
 }
 init();
 window.addEventListener('keydown',doKeyDown,true);
