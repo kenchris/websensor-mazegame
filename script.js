@@ -27,6 +27,8 @@ function magnitude(vector)      //Calculate the magnitude of a vector
 return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 }
 
+screen.orientation.lock('portrait');
+
 var canvas;
 var ctx;
 var dx = 0;
@@ -54,7 +56,6 @@ function init() {
 canvas = document.getElementById("canvas");
 ctx = canvas.getContext("2d");
 img.src = "maze2.gif";
-screen.orientation.lock('portrait');
 startSensors();
 return requestAnimationFrame(draw);
 }
@@ -82,10 +83,11 @@ function move()        //Moves the ball
         if(magnitude(diff) > 1)
         {
                 console.log("Shaking");
-                shakingvar = shakingvar + 2;
+                shakingvar = shakingvar + 1;
         }
         else
         {
+                console.log("Not shaking");
                 shakingvar = shakingvar - 1;
         }
         if(shakingvar >= 10)    //shake event
