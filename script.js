@@ -67,8 +67,8 @@ init();
 function move()        //Moves the ball
 {
         //Simulate friction
-        dx = dx/1.01
-        dy = dy/1.01
+        dx = dx/(1+0.01*dx)
+        dy = dy/(1+0.01*dy)
         //y axis
         if(y + dy < HEIGHT && y + dy > 0)
         {
