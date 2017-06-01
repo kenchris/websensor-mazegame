@@ -252,8 +252,8 @@ function startSensors() {
                   console.log(`Gyroscope ${err.error}`)
                 };
                 gyroscope.start();
-                } catch(err) { console.log(err); }
                 */
+                } catch(err) { console.log(err); }
                 sensors_started = true;
                 return sensors;
         }
