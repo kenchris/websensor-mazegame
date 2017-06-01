@@ -103,18 +103,12 @@ function startSensors() {
                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
                         //remove noise
                         if(Math.abs(gravity.x > 0.1))
-                        {
-                                if(Math.abs(dx) < 10)
-                                {     
+                        {    
                                         dx = gravity['x'];
-                                } 
                         }     
                         if(Math.abs(gravity.y > 0.1))
-                        {         
-                                if(Math.abs(dy) < 10)
-                                {     
-                                        dy = gravity['y'];
-                                }                        
+                        {            
+                                        dy = gravity['y'];                      
                         }
                         console.log(dx, dy, x, y)
                 }
