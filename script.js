@@ -5,7 +5,7 @@ var sensorfreq = 60;     //for setting desired sensor frequency
 var sensors_started = false;
 
 
-var moveUpdate = setInterval(move, 1000/sensorfreq);
+var moveUpdate = setInterval(move, 1);
 
 class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
   constructor(reading, bias) {
@@ -67,8 +67,8 @@ init();
 function move()        //Moves the ball
 {
         //Simulate friction
-        dx = dx/1.05
-        dy = dy/1.05
+        //dx = dx/1.05
+        //dy = dy/1.05
         //y axis
         if(y + dy < HEIGHT && y + dy > 0)
         {
@@ -108,7 +108,7 @@ function startSensors() {
                         }     
                         if(Math.abs(accelNoG.y > 0.1))
                         {              
-                                dy = -1.2 * gravity['y'];
+                                dy = 1.2 * gravity['y'];
                         }
                         console.log(dx, dy, x, y)
                 }
