@@ -43,6 +43,7 @@ function init() {
 canvas = document.getElementById("canvas");
 ctx = canvas.getContext("2d");
 img.src = "maze2.gif";
+screen.orientation.lock('portrait');
 startSensors();
 return requestAnimationFrame(draw);
 }
