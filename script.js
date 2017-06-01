@@ -72,7 +72,8 @@ function move()        //Moves the ball
         //y axis
         if(y + dy < HEIGHT && y + dy > 0)
         {
-                y += 2 * dy;
+                dy = 2 * dy;
+                y += dy;
                 clear();
                 checkcollision();
                 if (collision == 1){
@@ -80,7 +81,8 @@ function move()        //Moves the ball
                         collision = 0;
                 }
         }
-                x += 2 * dx;
+                dx = 2 * dx;
+                x += dx;
                 clear();
                 checkcollision();
                 if (collision == 1){
