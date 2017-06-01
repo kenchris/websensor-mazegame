@@ -69,11 +69,11 @@ function move()        //Moves the ball
         //remove noise
         if(Math.abs(gravity.x) > 0.1)
         {    
-                        dx = -gravity['x'];
+                        dx = -0.2 * gravity['x'];
         }     
         if(Math.abs(gravity.y) > 0.1)
         {            
-                        dy = gravity['y'];                      
+                        dy = 0.2 * gravity['y'];                      
         }
         console.log(dx, dy, x, y)
         //Simulate friction
