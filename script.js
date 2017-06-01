@@ -1,10 +1,11 @@
 var sensors = {};
 var accel = {x:null, y:null, z:null};
 var sensorfreq = 60;     //for setting desired sensor frequency
+var movefreq = 1000;    //how many times a second the ball moves, TODO: affects the speed of the ball, even though probably should not
 var sensors_started = false;
 
 
-var moveUpdate = setInterval(move, 10);
+var moveUpdate = setInterval(move, 1000/movefreq);
 
 class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
   constructor(reading, bias) {
