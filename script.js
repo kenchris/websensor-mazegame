@@ -1,11 +1,10 @@
 var sensors = {};
 var accel = {x:null, y:null, z:null};
-var accelNoG;
-var sensorfreq = 30;     //for setting desired sensor frequency
+var sensorfreq = 60;     //for setting desired sensor frequency
 var sensors_started = false;
 
 
-var moveUpdate = setInterval(move, 1);
+var moveUpdate = setInterval(move, 10);
 
 class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
   constructor(reading, bias) {
@@ -23,12 +22,15 @@ var canvas;
 var ctx;
 var dx = 0;
 var dy = 0;
+//starting position
 var x = 570;
 var y = 360;
+//canvas size
 var WIDTH = 800;
 var HEIGHT = 800;
 var img = new Image();
 var collision = 0;
+
 function rect(x,y,w,h) {
 ctx.beginPath();
 ctx.rect(x,y,w,h);
@@ -67,7 +69,7 @@ init();
 
 function move()        //Moves the ball
 {
-        //remove noise
+        //filter noise
         if(Math.abs(gravity.x) > 0.1)
         {    
                         dx = -0.5 * gravity['x'];
@@ -111,7 +113,6 @@ function startSensors() {
                 accelerometer.onchange = event => {
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                         gravity.update(accel);
-                        accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
                 }
                 accelerometer.onerror = err => {
                   accelerometer = null;
