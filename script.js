@@ -216,8 +216,8 @@ function startSensors() {
                 try {
                 //Right now we only want to use gravity sensor (low-pass filtered daccelerometer data)
                 //Accelerometer including gravity
-                //accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
-                accelerometer = new GravitySensor({frequency: sensorfreq})
+                accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
+                //accelerometer = new GravitySensor({frequency: sensorfreq})
                 sensors.Accelerometer = accelerometer;
                 gravity =  new LowPassFilterData(accelerometer, 0.5);   //need to find good bias value
                 accelerometer.onchange = event => {
