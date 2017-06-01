@@ -1,5 +1,8 @@
 var sensors = {};
 var accel = {x:null, y:null, z:null};
+var prevaccel = {x:null, y:null, z:null}        //used for detecting shaking motion
+var diff = {x:null, y:null, z:null}        //used for detecting shaking motion
+var shakingvar = 1;        //used for detecting shaking motion
 var sensorfreq = 60;     //for setting desired sensor frequency
 var movefreq = 1000;    //how many times a second the ball moves, TODO: affects the speed of the ball, even though probably should not
 var sensors_started = false;
@@ -18,6 +21,11 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
                 this.z = this.z * this.bias + reading.z * (1 - this.bias);
         }
 };
+
+function magnitude(vector)      //Calculate the magnitude of a vector
+{
+return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+}
 
 var canvas;
 var ctx;
@@ -70,6 +78,12 @@ init();
 
 function move()        //Moves the ball
 {
+        console.log(magnitude(diff));
+        if(magnitude(diff) > 1)
+        {
+                console.log("Shaking");
+                shakingvar = shakingvar + 1;
+        }
         //filter noise
         if(Math.abs(gravity.x) > 0.1)
         {    
@@ -112,7 +126,12 @@ function startSensors() {
                 sensors.Accelerometer = accelerometer;
                 gravity =  new LowPassFilterData(accelerometer, 0.8);   //need to find good bias value
                 accelerometer.onchange = event => {
+                        prevaccel = accel;
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
+                        for (var key in accel)
+                                {
+                                        diff[key] = accel[key] - prevaccel[key];
+                                }
                         gravity.update(accel);
                 }
                 accelerometer.onerror = err => {
