@@ -218,7 +218,7 @@ function startSensors() {
                 //Accelerometer including gravity
                 accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
                 sensors.Accelerometer = accelerometer;
-                gravity =  new LowPassFilterData(accelerometer, 0.8);
+                gravity =  new LowPassFilterData(accelerometer, 0.5);   //need to find good bias value
                 accelerometer.onchange = event => {
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                         gravity.update(accel);
