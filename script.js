@@ -66,6 +66,16 @@ init();
 
 function move()        //Moves the ball
 {
+        //remove noise
+        if(Math.abs(gravity.x) > 0.1)
+        {    
+                        dx = -gravity['x'];
+        }     
+        if(Math.abs(gravity.y) > 0.1)
+        {            
+                        dy = gravity['y'];                      
+        }
+        console.log(dx, dy, x, y)
         //Simulate friction
         dx = dx/1.01
         dy = dy/1.01
@@ -101,16 +111,6 @@ function startSensors() {
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                         gravity.update(accel);
                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-                        //remove noise
-                        if(Math.abs(gravity.x) > 0.1)
-                        {    
-                                        dx = -0.45 * gravity['x'];
-                        }     
-                        if(Math.abs(gravity.y) > 0.1)
-                        {            
-                                        dy = 0.45 * gravity['y'];                      
-                        }
-                        console.log(dx, dy, x, y)
                 }
                 accelerometer.onerror = err => {
                   accelerometer = null;
