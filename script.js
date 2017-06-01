@@ -23,6 +23,18 @@ var sensors_started = false;
 var textUpdate = setInterval(update_text, 1000/sensorfreq);
 var moveUpdate = setInterval(move, 200);
 
+class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
+  constructor(reading, bias) {
+    Object.assign(this, { x: reading.x, y: reading.y, z: reading.z });
+    this.bias = bias;
+  }
+        update(reading) {
+                this.x = this.x * this.bias + reading.x * (1 - this.bias);
+                this.y = this.y * this.bias + reading.y * (1 - this.bias);
+                this.z = this.z * this.bias + reading.z * (1 - this.bias);
+        }
+};
+
 var canvas;
 var ctx;
 var dx = 0;
@@ -117,18 +129,6 @@ rect(x, y, 15,15);
 }
 init();
 window.addEventListener('keydown',doKeyDown,true);
-
-class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
-  constructor(reading, bias) {
-    Object.assign(this, { x: reading.x, y: reading.y, z: reading.z });
-    this.bias = bias;
-  }
-        update(reading) {
-                this.x = this.x * this.bias + reading.x * (1 - this.bias);
-                this.y = this.y * this.bias + reading.y * (1 - this.bias);
-                this.z = this.z * this.bias + reading.z * (1 - this.bias);
-        }
-};
 
 function exportData() //https://stackoverflow.com/a/13405322
 {
