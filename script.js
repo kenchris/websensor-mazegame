@@ -24,8 +24,8 @@ var textUpdate = setInterval(update_text, 1000/sensorfreq);
 
 var canvas;
 var ctx;
-var dx = 5;
-var dy = 5;
+var dx = 0;
+var dy = 0;
 var x = 200;
 var y = 5;
 var WIDTH = 482;
@@ -176,6 +176,19 @@ function update_text()
         }
 }
 
+function move()        //Moves the ball
+{
+        if (y + dy < HEIGHT ){
+                y += dy;
+                clear();
+                checkcollision();
+                if (collision == 1){
+                        y -= dy;
+                        collision = 0;
+                }
+        }
+}
+
 function stop_sensors()
 {
         sensors.Accelerometer.stop();
@@ -220,6 +233,8 @@ function startSensors() {
                 sensors.Gyroscope = gyroscope;
                 gyroscope.onchange = event => {
                         velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
+                        dx = velGyro['x'];                        
+                        dy = velGyro['y'];
                 }
                 gyroscope.onerror = err => {
                   gyroscope = null;
