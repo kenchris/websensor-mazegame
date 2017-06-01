@@ -102,7 +102,7 @@ function move()        //Moves the ball
         {            
                         dy = 0.5 * gravity['y'];                      
         }
-        console.log(dx, dy, x, y)
+        //console.log(dx, dy, x, y)
         //Simulate friction
         dx = dx/1.01
         dy = dy/1.01
