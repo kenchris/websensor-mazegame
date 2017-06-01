@@ -41,8 +41,8 @@ var dx = 0;
 var dy = 0;
 var x = 200;
 var y = 5;
-var WIDTH = 482;
-var HEIGHT = 482;
+var WIDTH = 800;
+var HEIGHT = 800;
 var img = new Image();
 var collision = 0;
 function rect(x,y,w,h) {
@@ -58,9 +58,9 @@ ctx.drawImage(img, 0, 0);
 function init() {
 canvas = document.getElementById("canvas");
 ctx = canvas.getContext("2d");
-img.src = "maze.gif";
+img.src = "maze2.gif";
 startSensors();
-return setInterval(draw, 10);
+return setInterval(draw, 5);
 }
 
 //Use gravity sensor to control (positive x down, negative x up)
