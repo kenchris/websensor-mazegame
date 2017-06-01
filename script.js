@@ -181,13 +181,13 @@ function move()        //Moves the ball
 {
         //Simulate friction
         dx = dx/1.02
-        dy = dy/1.02
+        dy = dy/02.1
         //y axis
         if(y + dy < HEIGHT && y + dy > 0)
         {
                 y += dy;
                 clear();
-                //checkcollision();
+                checkcollision();
                 if (collision == 1){
                         y -= dy;
                         collision = 0;
@@ -195,7 +195,7 @@ function move()        //Moves the ball
         }
                 x += dx;
                 clear();
-                //checkcollision();
+                checkcollision();
                 if (collision == 1){
                         x -= dx;
                         collision = 0;
