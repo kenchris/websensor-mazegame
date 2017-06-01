@@ -102,11 +102,11 @@ function startSensors() {
                         gravity.update(accel);
                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
                         //remove noise
-                        if(Math.abs(gravity.x > 0.1))
+                        if(Math.abs(gravity.x) > 0.1)
                         {    
                                         dx = gravity['x'];
                         }     
-                        if(Math.abs(gravity.y > 0.1))
+                        if(Math.abs(gravity.y) > 0.1)
                         {            
                                         dy = gravity['y'];                      
                         }
