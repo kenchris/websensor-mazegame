@@ -67,8 +67,8 @@ init();
 function move()        //Moves the ball
 {
         //Simulate friction
-        //dx = dx/1.05
-        //dy = dy/1.05
+        dx = dx/1.01
+        dy = dy/1.01
         //y axis
         if(y + dy < HEIGHT && y + dy > 0)
         {
@@ -96,7 +96,7 @@ function startSensors() {
                 accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
                 //accelerometer = new GravitySensor({frequency: sensorfreq})
                 sensors.Accelerometer = accelerometer;
-                gravity =  new LowPassFilterData(accelerometer, 0.3);   //need to find good bias value
+                gravity =  new LowPassFilterData(accelerometer, 0.8);   //need to find good bias value
                 accelerometer.onchange = event => {
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                         gravity.update(accel);
