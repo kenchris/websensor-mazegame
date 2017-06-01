@@ -78,11 +78,20 @@ init();
 
 function move()        //Moves the ball
 {
-        console.log(magnitude(diff));
+        //console.log(magnitude(diff));
         if(magnitude(diff) > 1)
         {
                 console.log("Shaking");
                 shakingvar = shakingvar + 1;
+        }
+        else
+        {
+                shakingvar = shakingvar - 1;
+        }
+        if(shakingvar == 10)    //shake event
+        {
+                print("SHAKE"):
+                shakingvar = 0;
         }
         //filter noise
         if(Math.abs(gravity.x) > 0.1)
