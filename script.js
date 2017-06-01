@@ -82,7 +82,7 @@ function move()        //Moves the ball
         if(magnitude(diff) > 1)
         {
                 console.log("Shaking");
-                shakingvar = shakingvar + 1;
+                shakingvar = shakingvar + 2;
         }
         else
         {
