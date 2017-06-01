@@ -39,8 +39,8 @@ var canvas;
 var ctx;
 var dx = 0;
 var dy = 0;
-var x = 200;
-var y = 5;
+var x = 570;
+var y = 360;
 var WIDTH = 800;
 var HEIGHT = 800;
 var img = new Image();
@@ -216,7 +216,8 @@ function startSensors() {
                 try {
                 //Right now we only want to use gravity sensor (low-pass filtered daccelerometer data)
                 //Accelerometer including gravity
-                accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
+                //accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
+                accelerometer = new GravitySensor({frequency: sensorfreq})
                 sensors.Accelerometer = accelerometer;
                 gravity =  new LowPassFilterData(accelerometer, 0.5);   //need to find good bias value
                 accelerometer.onchange = event => {
