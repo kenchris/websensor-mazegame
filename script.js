@@ -15,7 +15,7 @@ var currentButton = null;
 var accel = {x:null, y:null, z:null};
 var accelNoG;
 var velGyro;
-var recording = false;  //are we recording data or not?
+var recording = true;  //are we recording data or not?
 var sensorfreq = 60;     //for setting desired sensor frequency
 var nosensors = false;  //for testing with fake values and without sensors
 var sensors_started = false;
@@ -46,8 +46,12 @@ function init() {
 canvas = document.getElementById("canvas");
 ctx = canvas.getContext("2d");
 img.src = "maze.gif";
+startSensors();
 return setInterval(draw, 10);
 }
+
+//Use gyroscope to control (positive x down, negative x up)
+
 function doKeyDown(evt){
 switch (evt.keyCode) {
 case 38:  /* Up arrow was pressed */
@@ -161,15 +165,12 @@ return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z
 
 function update_text()
 {
-if (accel && accelNoG && gravity && orientationMat && velGyro)  //only update if all data available
-        {
-                        document.getElementById("accl").textContent = `Acceleration ${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: ${magnitude(accel).toFixed(3)}`;
-                        document.getElementById("accl_nog").textContent = `Acceleration without gravity ${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: ${magnitude(accelNoG).toFixed(3)}`;
-                        document.getElementById("g_accl").textContent = `Isolated gravity ${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
-                        document.getElementById("ori").textContent = `Orientation matrix ${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]} ...`;
+                        //document.getElementById("accl").textContent = `Acceleration ${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: ${magnitude(accel).toFixed(3)}`;
+                        //document.getElementById("accl_nog").textContent = `Acceleration without gravity ${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: ${magnitude(accelNoG).toFixed(3)}`;
+                        //document.getElementById("g_accl").textContent = `Isolated gravity ${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
+                        //document.getElementById("ori").textContent = `Orientation matrix ${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]} ...`;
                         document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: ${magnitude(velGyro).toFixed(3)}`;
                         document.getElementById("sensorfreq").textContent = `Sensor frequency ${sensorfreq}`;
-        }
 }
 
 function stop_sensors()
@@ -179,67 +180,12 @@ function stop_sensors()
         sensors.Gyroscope.stop();
 }
 
-function reset_data()   //to be run every button press and release
-{
-        accelerationData = [];        //reset accelerationData every new button press
-        accelerationnogData = [];        //reset accelerationnogData every new button press
-        orientationData = [];        //reset orientationData every new button press
-        rotationData = [];
-}
-
-function get_click(buttonID)    //ID not necessarily numerical
-{
-        currentButton = buttonID;
-        document.getElementById("bstate").textContent = `Button state ${currentButton}`;
-        console.log(currentButton + ' pressed down');
-        recording = true;
-        reset_data();
-        reading = setInterval(read_sensors, 1000/sensorfreq);     //start saving data from sensors in loop
-}
-
-function release()
-{        
-        clearInterval(reading); //stop saving data from sensors
-        //save data to dataObject
-        dataObject.button = currentButton;
-        dataObject.acceleration = accelerationData;
-        dataObject.accelerationnog = accelerationnogData;
-        dataObject.orientation = orientationData;
-        dataObject.rotation = rotationData;
-        dataObject.frequency = sensorfreq;
-        reset_data();
-        var b = new Object;     //need to push by value
-        Object.assign(b, dataObject);
-        dataArray.push(b);
-        console.log(currentButton + ' released');        
-        currentButton = null;
-        document.getElementById("bstate").textContent = `Button state ${currentButton}`;
-        recording = false;
-}
-
-function store (key, data)   //currently uses LocalStorage, maybe should use something else?
-{
-        if (typeof(Storage) !== "undefined") 
-        {
-                localStorage.setItem(key, JSON.stringify(data));
-                return 0;     
-        } 
-        else 
-        {
-                console.log('No LocalStorage support');
-                return 1;
-        }
-}
-
-function retrieve (key)
-{
-        return JSON.parse(localStorage.getItem(key));
-}
-
 function startSensors() {
         if(!(nosensors))
         {
                 try {
+                //Right now we only want to use gyroscope
+                /*
                 //Accelerometer including gravity
                 accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
                 sensors.Accelerometer = accelerometer;
@@ -265,6 +211,7 @@ function startSensors() {
                   console.log(`Absolute orientation sensor ${err.error}`)
                 };
                 absoluteorientationsensor.start();
+                */
                 //Gyroscope
                 gyroscope = new Gyroscope({ frequency: sensorfreq});
                 sensors.Gyroscope = gyroscope;
@@ -286,7 +233,7 @@ function startSensors() {
         }
 }
 
-function read_sensors() //ran when a button is pressed, saves data gathered from sensors
+function read_sensors()
 {
         if (recording)
         {     
