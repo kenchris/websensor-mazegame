@@ -21,7 +21,7 @@ var nosensors = false;  //for testing with fake values and without sensors
 var sensors_started = false;
 
 var textUpdate = setInterval(update_text, 1000/sensorfreq);
-var moveUpdate = setInterval(move, 200);
+var moveUpdate = setInterval(move, 1000/sensorfreq);
 
 class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
   constructor(reading, bias) {
@@ -220,7 +220,7 @@ function startSensors() {
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                         gravity.update(accel);
                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-                        dx = gravity['x'];                        
+                        dx = -gravity['x'];                        
                         dy = gravity['y'];
                         console.log(dx, dy)
                 }
