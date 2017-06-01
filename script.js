@@ -20,7 +20,7 @@ var sensorfreq = 60;     //for setting desired sensor frequency
 var nosensors = false;  //for testing with fake values and without sensors
 var sensors_started = false;
 
-var textUpdate = setInterval(update_text, 1000/sensorfreq);
+//var textUpdate = setInterval(update_text, 1000/sensorfreq);
 var moveUpdate = setInterval(move, 1000/sensorfreq);
 
 class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
@@ -183,7 +183,7 @@ function move()        //Moves the ball
         if (y + dy < HEIGHT && y - dy > 0){
                 y += dy;
                 clear();
-                checkcollision();
+                //checkcollision();
                 if (collision == 1){
                         y -= dy;
                         collision = 0;
@@ -192,7 +192,7 @@ function move()        //Moves the ball
         if ((x + dx < WIDTH && x - dx > 0)){
                 x += dx;
                 clear();
-                checkcollision();
+                //checkcollision();
                 if (collision == 1){
                         x -= dx;
                         collision = 0;
@@ -221,7 +221,7 @@ function startSensors() {
                         gravity.update(accel);
                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
                         dx = -gravity['x'];                        
-                        dy = gravity['y'];
+                        dy = -gravity['y'];
                         console.log(dx, dy)
                 }
                 accelerometer.onerror = err => {
