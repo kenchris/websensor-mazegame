@@ -27,6 +27,7 @@ function magnitude(vector)      //Calculate the magnitude of a vector
 return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 }
 
+screen.lockOrientation('portrait');
 screen.orientation.lock('portrait');
 
 var canvas;
