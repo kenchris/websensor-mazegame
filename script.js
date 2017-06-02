@@ -143,6 +143,12 @@ function startSensors() {
                 //accelerometer = new GravitySensor({frequency: sensorfreq})
                 sensors.Accelerometer = accelerometer;
                 gravity =  new LowPassFilterData(accelerometer, 0.8);   //need to find good bias value
+                //For the ball to not move slow in the beginning due to gravity low-pass filtering taking very long, we set an initial value
+                if(gravity.x == null && gravity.y == null)
+                {
+                gravity.x = accel.x;
+                gravity.y = accel.y;
+                }
                 accelerometer.onchange = event => {
                         prevaccel = accel;
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
