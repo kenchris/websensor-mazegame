@@ -1,19 +1,187 @@
-
-<!---
-Sourced from http://html5.litten.com/make-a-maze-game-on-an-html5-canvas/
---->
-<!doctype html>
 <html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=0.55">
-<link rel="manifest" href="manifest.json" />
-<title>Websensor maze game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=0.55">
+  <link rel="manifest" href="manifest.json" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1">
+  <title>A-maze-ing</title>
 </head>
+
+<template id="maze-view">
+  <style>
+    :host {
+      width: 100vh;
+      height: 100vh;
+    }
+
+    button {
+      display: inline-block;
+      height: 25vh;
+      padding: 0;
+      margin: 0;
+      vertical-align: top;
+      width: 31vw;
+    }
+
+    canvas {
+      margin: 16px;
+    }
+  </style>
+  <canvas id="canvas" width="800" height="800"></canvas>
+</template>
+
+<script>
+  function eulerFromMat4(out, a) {
+    const radToDeg = 180 / Math.PI;
+
+    if (a[10] > 0) { // cos(beta) > 0
+      out[0] = Math.atan2(-a[1], a[5]);
+      out[1]  = Math.asin(a[9]); // beta (-pi/2, pi/2)
+      out[2] = Math.atan2(-a[8], a[10]); // gamma (-pi/2, pi/2)
+    }
+    else if (a[10] < 0) {  // cos(beta) < 0
+      out[0] = Math.atan2(a[1], -a[5]);
+      out[1]  = -Math.asin(a[9]);
+      out[1]  += (out[1] >= 0) ? -Math.PI : Math.PI; // beta [-pi,-pi/2) U (pi/2,pi)
+      out[2] = Math.atan2(a[8], -a[10]); // gamma (-pi/2, pi/2)
+    }
+    else { // a[10] (m33) == 0
+      if (a[8] > 0) {  // cos(gamma) == 0, cos(beta) > 0
+        out[0] = Math.atan2(-a[1], a[5]);
+        out[1]  = Math.asin(a[9]); // beta [-pi/2, pi/2]
+        out[2] = - (Math.PI / 2); // gamma = -pi/2
+      }
+      else if (a[8] < 0) { // cos(gamma) == 0, cos(beta) < 0
+        out[0] = Math.atan2(a[1], -a[5]);
+        out[1]  = -Math.asin(a[9]);
+        out[1]  += (out[1] >= 0) ? - Math.PI : Math.PI; // beta [-pi,-pi/2) U (pi/2,pi)
+        out[2] = - (Math.PI / 2); // gamma = -pi/2
+      }
+      else { // a[8] (m31) == 0, cos(beta) == 0
+        // Gimbal lock discontinuity
+        out[0] = Math.atan2(a[4], a[0]);
+        out[1]  = (a[9] > 0) ? (Math.PI / 2) : - (Math.PI / 2); // beta = +-pi/2
+        out[3] = 0; // gamma = 0
+      }
+    }
+
+    // alpha is in [-pi, pi], make sure it is in [0, 2*pi).
+    if (out[0] < 0) {
+      out[0] += 2 * Math.PI; // alpha [0, 2*pi)
+    }
+
+    out[0] *= radToDeg;
+    out[1] *= radToDeg;
+    out[2] *= radToDeg;
+
+    return out;
+  };
+
+  class InclinationSensor {
+    constructor() {
+      const sensor = new AbsoluteOrientationSensor({ frequency: 60 });
+      const mat4 = new Float32Array(16);
+      const euler = new Float32Array(3);
+
+      sensor.onchange = () => {
+        sensor.populateMatrix(mat4);
+        eulerFromMat4(euler, mat4);
+        this.roll = euler[2]; // y
+        this.pitch = euler[1]; // x
+
+        if (this.onchange) this.onchange();
+      };
+
+      sensor.start();
+    }
+  }
+
+  customElements.define('maze-view', class extends HTMLElement {
+    constructor() {
+      super();
+      const template = document.querySelector('#maze-view');
+      const clone = document.importNode(template.content, true);
+      const shadowRoot = this.attachShadow({ mode: 'open' });
+      shadowRoot.appendChild(clone);
+
+      this.dx = 0;
+      this.dy = 0;
+      this.x = 570;
+      this.y = 360;
+    }
+
+    connectedCallback() {
+      this.canvasEl = this.shadowRoot.querySelector('#canvas');
+      this.context = this.canvasEl.getContext("2d");
+
+      const width = window.screen.availWidth - 16 * 2;
+      this.canvasEl.style.width = width;
+      this.canvasEl.style.height = width;
+
+      this.image = new Image();
+      this.image.src = "maze2.gif";
+      this.image.onload = _ => {
+        this.canvasEl.width = this.image.width;
+        this.canvasEl.height = this.image.height;
+      }
+
+      const sensor = new InclinationSensor();
+      sensor.onchange = () => {
+        this.x += Math.round(sensor.roll / 4);
+        while (this.checkCollision()) {
+          this.x -= Math.sign(sensor.roll);
+        }
+
+        this.y += Math.round(sensor.pitch / 4);        
+        while (this.checkCollision()) {
+          this.y -= Math.sign(sensor.pitch);
+        }
+
+      }
+
+      this.render();
+    }
+
+    checkCollision() {
+      const ball = this.context.getImageData(this.x, this.y, 16, 16);
+      const pixels = ball.data;
+
+      let collision = false;
+
+      for (let i = 0; i < pixels.length; i += 4) {
+        if (pixels[i] == 0) {
+          collision = true;
+        }
+      }
+
+      return collision;
+    }
+
+    clear() {
+      this.context.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
+      this.context.drawImage(this.image, 0, 0);
+    }
+
+    render() {
+      this.clear();
+      this.context.fillStyle = "purple";
+
+      this.context.beginPath();
+      this.context.rect(this.x, this.y, 16, 16);
+      this.context.closePath();
+      this.context.fill();
+
+      requestAnimationFrame(() => this.render());
+    }
+  });
+</script>
+
+<style>
+  body {
+    margin: 0px;
+  }
+</style>
 <body>
-<canvas id="canvas" width="800" height="800">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
-<script type="text/javascript" src="script.js"></script>
+  <maze-view></maze-view>
 </body>
 </html>
