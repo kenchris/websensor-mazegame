@@ -61,7 +61,13 @@
         if (this.onchange) this.onchange();
       };
 
-      sensor.start();
+      sensor.onactivate = () => {
+        if (this.onactivate) this.onactivate();
+      }
+
+      const start = () => sensor.start();
+
+      Object.assign(this, { start });
     }
   }
 
@@ -73,24 +79,33 @@
       const shadowRoot = this.attachShadow({ mode: 'open' });
       shadowRoot.appendChild(clone);
 
+      this.ballSize = 18;
       this.prevX = this.x = 0;
-      this.prevY = this.y = 135;
+      this.prevY = this.y = 0;
+
+      this.levels = ["maze.png", "maze2.png"];
     }
 
     connectedCallback() {
-      this.canvasEl = this.shadowRoot.querySelector('#canvas');
-      this.context = this.canvasEl.getContext("2d");
+      const canvasEl = this.shadowRoot.querySelector('#canvas');
+      this.context = canvasEl.getContext("2d");
+
+      const offscreenEl = document.createElement('canvas');
+      this.offscreenContext = offscreenEl.getContext('2d');
 
       const width = window.screen.availWidth - 16 * 2;
-      this.canvasEl.style.width = width;
-      this.canvasEl.style.height = width;
+      canvasEl.style.width = width;
+      canvasEl.style.height = width;
 
       this.image = new Image();
-      this.image.src = "levels/maze2.gif";
+      const levelNo = Math.floor(Math.random() * this.levels.length);
+      this.image.src = `levels/${this.levels[levelNo]}`;
       this.image.onload = _ => {
-        this.canvasEl.width = this.image.width;
-        this.canvasEl.height = this.image.height;
-        this.clear();
+        offscreenEl.width = canvasEl.width = this.image.width;
+        offscreenEl.height = canvasEl.height = this.image.height;
+
+        this.context.drawImage(this.image, 0, 0);
+        this.offscreenContext.drawImage(this.image, 0, 0);
       }
 
       const sensor = new InclinationSensor();
@@ -99,24 +114,20 @@
         this.pitch = sensor.pitch;
       }
 
-      this.render();
+      sensor.onactivate = () => this.render();
+      sensor.start();
     }
 
     collides() {
-      const rgbaData = this.context.getImageData(this.x, this.y, 16, 16).data;
+      const rgbaData = this.offscreenContext.getImageData(this.x, this.y, this.ballSize, this.ballSize).data;
 
       for (let i = 0; i < rgbaData.length; i += 4) {
-        if (rgbaData[i] == 0) {
+        if (rgbaData[i] < 255 / 2) {
           return true;
         }
       }
 
       return false;
-    }
-
-    clear() {
-      this.context.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
-      this.context.drawImage(this.image, 0, 0);
     }
 
     render() {
@@ -138,15 +149,15 @@
         }
       }
 
-      this.context.clearRect(this.prevX, this.prevY, 16, 16);
-      this.clear();
+      this.context.clearRect(this.prevX, this.prevY, this.ballSize, this.ballSize);
 
       this.context.fillStyle = "purple";
 
       this.context.beginPath();
-      this.context.rect(this.x, this.y, 16, 16);
-      this.context.closePath();
+      const ballRadius = this.ballSize / 2;
+      this.context.arc(this.x + ballRadius, this.y + ballRadius, ballRadius, 0, 2 * Math.PI);
       this.context.fill();
+      this.context.closePath();
 
       this.prevX = this.x;
       this.prevY = this.y;
