@@ -99,7 +99,7 @@ function move()        //Moves the ball
                 shakingvar = shakingvar - 1;
                 }
         }
-        if(shakingvar >= 50)    //shake event
+        if(shakingvar >= 100)    //shake event
         {
                 console.log("SHAKE");
                 shakingvar = 0;
