@@ -90,6 +90,15 @@ function move()        //Moves the ball
                 console.log("Not shaking");
                 shakingvar = shakingvar - 1;
         }
+        //filter noise
+        if(Math.abs(gravity.x) > 0.1)
+        {    
+                        dx = -0.5 * gravity['x'];
+        }     
+        if(Math.abs(gravity.y) > 0.1)
+        {            
+                        dy = 0.5 * gravity['y'];                      
+        }
         if(shakingvar >= 10)    //shake event
         {
                 console.log("SHAKE");
@@ -135,15 +144,6 @@ function startSensors() {
                                         diff[key] = accel[key] - prevaccel[key];
                                 }
                         gravity.update(accel);
-                        //filter noise
-                        if(Math.abs(gravity.x) > 0.1)
-                        {    
-                                        dx = -0.5 * gravity['x'];
-                        }     
-                        if(Math.abs(gravity.y) > 0.1)
-                        {            
-                                        dy = 0.5 * gravity['y'];                      
-                        }
                 }
                 accelerometer.onerror = err => {
                   accelerometer = null;
