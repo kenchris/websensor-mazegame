@@ -89,7 +89,10 @@ function move()        //Moves the ball
         else
         {
                 console.log("Not shaking");
+                if(shakingvar > 0)
+                {
                 shakingvar = shakingvar - 1;
+                }
         }
         //filter noise
         if(Math.abs(gravity.x) > 0.1)
