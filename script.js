@@ -7,9 +7,7 @@ var shakingvar = 1;        //used for detecting shaking motion
 var sensorfreq = 60;     //for setting desired sensor frequency
 var movefreq = 1000;    //how many times a second the ball moves, TODO: affects the speed of the ball, even though probably should not
 var sensors_started = false;
-
-
-var moveUpdate = setInterval(move, 1000/movefreq);
+var moveUpdate;
 
 class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
   constructor(reading, bias) {
@@ -59,6 +57,7 @@ canvas = document.getElementById("canvas");
 ctx = canvas.getContext("2d");
 img.src = "maze2.gif";
 startSensors();
+moveUpdate = setInterval(move, 1000/movefreq);
 return requestAnimationFrame(draw);
 }
 
