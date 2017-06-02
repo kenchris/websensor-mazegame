@@ -1,4 +1,5 @@
 var sensors = {};
+var gravity = {x:null, y:null, z:null};
 var accel = {x:null, y:null, z:null};
 var prevaccel = {x:null, y:null, z:null}        //used for detecting shaking motion
 var diff = {x:null, y:null, z:null}        //used for detecting shaking motion
