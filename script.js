@@ -4,7 +4,7 @@ var accel = {x:null, y:null, z:null};
 var prevaccel = {x:null, y:null, z:null}        //used for detecting shaking motion
 var diff = {x:null, y:null, z:null}        //used for detecting shaking motion
 var shakingvar = 1;        //used for detecting shaking motion
-var sensorfreq = 60;     //for setting desired sensor frequency
+var sensorfreq = 30;     //for setting desired sensor frequency
 var movefreq = 1000;    //how many times a second the ball moves, TODO: affects the speed of the ball, even though probably should not
 var sensors_started = false;
 var moveUpdate;
@@ -88,16 +88,12 @@ function move()        //Moves the ball
         {            
                         dy = 0.5 * gravity['y'];                      
         }
-        //console.log(magnitude(diff));
-        //console.log(shakingvar);
         if(magnitude(diff) > 2)
         {
-                //console.log("Shaking");
                 shakingvar = shakingvar + 1;
         }
         else
         {
-                //console.log("Not shaking");
                 if(shakingvar > 0)
                 {
                 shakingvar = shakingvar - 1;
@@ -108,7 +104,6 @@ function move()        //Moves the ball
                 console.log("SHAKE");
                 shakingvar = 0;
         }
-        //console.log(dx, dy, x, y)
         //Simulate friction
         dx = dx/1.01
         dy = dy/1.01
