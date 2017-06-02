@@ -80,7 +80,7 @@ init();
 function move()        //Moves the ball
 {
         //console.log(magnitude(diff));
-        print(shakingvar);
+        console.log(shakingvar);
         if(magnitude(diff) > 1)
         {
                 console.log("Shaking");
