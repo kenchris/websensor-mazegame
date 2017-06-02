@@ -97,15 +97,6 @@ function move()        //Moves the ball
                 console.log("SHAKE");
                 shakingvar = 0;
         }
-        //filter noise
-        if(Math.abs(gravity.x) > 0.1)
-        {    
-                        dx = -0.5 * gravity['x'];
-        }     
-        if(Math.abs(gravity.y) > 0.1)
-        {            
-                        dy = 0.5 * gravity['y'];                      
-        }
         //console.log(dx, dy, x, y)
         //Simulate friction
         dx = dx/1.01
@@ -146,6 +137,15 @@ function startSensors() {
                                         diff[key] = accel[key] - prevaccel[key];
                                 }
                         gravity.update(accel);
+                        //filter noise
+                        if(Math.abs(gravity.x) > 0.1)
+                        {    
+                                        dx = -0.5 * gravity['x'];
+                        }     
+                        if(Math.abs(gravity.y) > 0.1)
+                        {            
+                                        dy = 0.5 * gravity['y'];                      
+                        }
                 }
                 accelerometer.onerror = err => {
                   accelerometer = null;
