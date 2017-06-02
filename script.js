@@ -79,6 +79,15 @@ init();
 
 function move()        //Moves the ball
 {
+        //filter noise
+        if(Math.abs(gravity.x) > 0.1)
+        {    
+                        dx = -0.5 * gravity['x'];
+        }     
+        if(Math.abs(gravity.y) > 0.1)
+        {            
+                        dy = 0.5 * gravity['y'];                      
+        }
         //console.log(magnitude(diff));
         console.log(shakingvar);
         if(magnitude(diff) > 1)
@@ -93,15 +102,6 @@ function move()        //Moves the ball
                 {
                 shakingvar = shakingvar - 1;
                 }
-        }
-        //filter noise
-        if(Math.abs(gravity.x) > 0.1)
-        {    
-                        dx = -0.5 * gravity['x'];
-        }     
-        if(Math.abs(gravity.y) > 0.1)
-        {            
-                        dy = 0.5 * gravity['y'];                      
         }
         if(shakingvar >= 10)    //shake event
         {
@@ -123,6 +123,8 @@ function move()        //Moves the ball
                         collision = 0;
                 }
         }
+        if(x + dx < WIDTH && x + dx > 0)
+        {
                 x += dx;
                 clear();
                 checkcollision();
@@ -130,6 +132,7 @@ function move()        //Moves the ball
                         x -= dx;
                         collision = 0;
                 }
+        }
 }
 
 function startSensors() {
