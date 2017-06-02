@@ -61,6 +61,7 @@ if(gravity.x == null && gravity.y == null)
 {
 gravity.x = accel.x;
 gravity.y = accel.y;
+console.log(gravity);
 }
 moveUpdate = setInterval(move, 1000/movefreq);
 return requestAnimationFrame(draw);
@@ -95,7 +96,7 @@ function move()        //Moves the ball
                         dy = 0.5 * gravity['y'];                      
         }
         //console.log(magnitude(diff));
-        console.log(shakingvar);
+        //console.log(shakingvar);
         if(magnitude(diff) > 2)
         {
                 //console.log("Shaking");
