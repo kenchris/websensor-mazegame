@@ -56,6 +56,12 @@ canvas = document.getElementById("canvas");
 ctx = canvas.getContext("2d");
 img.src = "maze2.gif";
 startSensors();
+//For the ball to not move slow in the beginning due to gravity low-pass filtering taking very long, we set an initial value
+if(gravity.x == null && gravity.y == null)
+{
+gravity.x = accel.x;
+gravity.y = accel.y;
+}
 moveUpdate = setInterval(move, 1000/movefreq);
 return requestAnimationFrame(draw);
 }
@@ -143,12 +149,6 @@ function startSensors() {
                 //accelerometer = new GravitySensor({frequency: sensorfreq})
                 sensors.Accelerometer = accelerometer;
                 gravity =  new LowPassFilterData(accelerometer, 0.8);   //need to find good bias value
-                //For the ball to not move slow in the beginning due to gravity low-pass filtering taking very long, we set an initial value
-                if(gravity.x == null && gravity.y == null)
-                {
-                gravity.x = accel.x;
-                gravity.y = accel.y;
-                }
                 accelerometer.onchange = event => {
                         prevaccel = accel;
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
