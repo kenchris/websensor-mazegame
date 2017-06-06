@@ -106,13 +106,18 @@
       const offscreenEl = document.createElement('canvas');
       this.offscreenContext = offscreenEl.getContext('2d');
 
-      let resizeObserver = new ResizeObserver(entries => {
-        const rect = entries[0].contentRect;
-        console.log(rect);
+      if (window.ResizeObserver) {
+        let resizeObserver = new ResizeObserver(entries => {
+          const rect = entries[0].contentRect;
+          canvasEl.style.width = rect.width - 2 * 16;
+          canvasEl.style.height = rect.width - 2 * 16;
+        });
+        resizeObserver.observe(this);
+      } else {
+        const rect = this.getBoundingClientRect();
         canvasEl.style.width = rect.width - 2 * 16;
         canvasEl.style.height = rect.width - 2 * 16;
-      });
-      resizeObserver.observe(this);
+      }
 
       this.image = new Image();
       const levelNo = Math.floor(Math.random() * this.levels.length);
