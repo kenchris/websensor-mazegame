@@ -1,0 +1,45 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+
+handlers:
+
+- url: /sw.js
+  static_files: sw.js
+  upload: sw.js
+
+- url: /icon-192x192.png
+  static_files: icon-192x192.png
+  upload: icon-192x192.png
+
+- url: /icon-512x512.png
+  static_files: icon-512x512.png
+  upload: icon-512x512.png
+
+- url: /manifest.json
+  static_files: manifest.json
+  upload: manifest.json
+
+- url: /levels
+  static_dir: levels
+  secure: always
+
+- url: .*
+  script: main.app
+  secure: always
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?\..*
+- ^(.*/)?.*\.bak$
+- ^.*.md|markdown
