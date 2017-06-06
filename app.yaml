@@ -12,6 +12,10 @@ handlers:
   static_files: sw.js
   upload: sw.js
 
+- url: /logo.png
+  static_files: logo.png
+  upload: logo.png
+
 - url: /icon-192x192.png
   static_files: icon-192x192.png
   upload: icon-192x192.png

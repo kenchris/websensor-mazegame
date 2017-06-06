@@ -11,14 +11,22 @@
 <template id="maze-view">
   <style>
     :host {
-      width: 100vh;
-      height: 100vh;
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: column;
     }
 
     canvas {
+      padding: 16px;
+      align-self: center;
+    }
+
+    div {
       margin: 16px;
     }
   </style>
+  <div id="info"><slot></slot></div>
   <canvas id="canvas" width="800" height="800"></canvas>
 </template>
 
@@ -87,22 +95,31 @@
     }
 
     connectedCallback() {
+      if (window.AbsoluteOrientationSensor) {
+        const infoEl = this.shadowRoot.querySelector('#info');
+        infoEl.style.display = "none";
+      }
+
       const canvasEl = this.shadowRoot.querySelector('#canvas');
       this.context = canvasEl.getContext("2d");
 
       const offscreenEl = document.createElement('canvas');
       this.offscreenContext = offscreenEl.getContext('2d');
 
-      const width = window.screen.availWidth - 16 * 2;
-      canvasEl.style.width = width;
-      canvasEl.style.height = width;
+      let resizeObserver = new ResizeObserver(entries => {
+        const rect = entries[0].contentRect;
+        console.log(rect);
+        canvasEl.style.width = rect.width - 2 * 16;
+        canvasEl.style.height = rect.width - 2 * 16;
+      });
+      resizeObserver.observe(this);
 
       this.image = new Image();
       const levelNo = Math.floor(Math.random() * this.levels.length);
       this.image.src = `levels/${this.levels[levelNo]}`;
       this.image.onload = _ => {
-        offscreenEl.width = canvasEl.width = this.image.width;
-        offscreenEl.height = canvasEl.height = this.image.height;
+        offscreenEl.width = canvasEl.width = canvasEl.style.maxWidth = this.image.width;
+        offscreenEl.height = canvasEl.height = canvasEl.style.maxHeight = this.image.height;
 
         this.context.drawImage(this.image, 0, 0);
         this.offscreenContext.drawImage(this.image, 0, 0);
@@ -170,9 +187,23 @@
 <style>
   body {
     margin: 0px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body > * {
+    align-self: center;
+  }
+
+  img {
+    max-width: 559px;
+    max-height: 146px;
+    width: 100%;
+    height: auto;
   }
 </style>
 <body>
-  <maze-view></maze-view>
+  <img src="logo.png"></img>
+  <maze-view>Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags</maze-view>
 </body>
 </html>
