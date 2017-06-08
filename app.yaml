@@ -16,19 +16,15 @@ handlers:
   static_files: logo.png
   upload: logo.png
 
-- url: /icon-192x192.png
-  static_files: icon-192x192.png
-  upload: icon-192x192.png
-
-- url: /icon-512x512.png
-  static_files: icon-512x512.png
-  upload: icon-512x512.png
-
 - url: /manifest.json
   static_files: manifest.json
   upload: manifest.json
 
 - url: /levels
+  static_dir: levels
+  secure: always
+
+- url: /icons
   static_dir: levels
   secure: always
 
