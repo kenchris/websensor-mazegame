@@ -28,6 +28,7 @@
   </style>
   <div id="info"><slot></slot></div>
   <canvas id="canvas" width="800" height="800"></canvas>
+  <div id="console">hi</div>
 </template>
 
 <script>
@@ -87,14 +88,35 @@
       const shadowRoot = this.attachShadow({ mode: 'open' });
       shadowRoot.appendChild(clone);
 
+      let log = window.console.log;
+      window.console.log = (message, ...rest) => {
+        let target = shadowRoot.querySelector('#console');
+        target.innerHTML = message;
+
+        log.call(window.console, message, ...rest);
+      }
+
       this.ballSize = 18;
       this.prevX = this.x = 0;
       this.prevY = this.y = 0;
 
-      this.levels = [
-        "maze.png", "maze2.png", "maze3.png",
-        "maze4.png", "maze5.png", "maze6.png"
-      ];
+      this.State = {
+        INITIAL: Symbol('INITIAL'),
+        ENTERED: Symbol('ENTERED'),
+        EXITED: Symbol('EXITED')
+      }
+
+      this.state = this.State.INITIAL;
+      console.log("Try entering the maze, it will be exciting!")
+
+      this.levels = {
+        0: { src: "maze.png",  padding: 22 },
+        1: { src: "maze2.png", padding: 42 },
+        2: { src: "maze3.png", padding: 33 },
+        3: { src: "maze4.png", padding: 24 },
+        4: { src: "maze5.png", padding: 24 },
+        5: { src: "maze6.png", padding: 22 }
+      };
     }
 
     connectedCallback() {
@@ -123,8 +145,10 @@
       }
 
       this.image = new Image();
-      const levelNo = Math.floor(Math.random() * this.levels.length);
-      this.image.src = `levels/${this.levels[levelNo]}`;
+      const levelNo = Math.floor(Math.random() * Object.keys(this.levels).length);
+      this.image.src = `levels/${this.levels[levelNo].src}`;
+      this.image.padding = this.levels[levelNo].padding;
+      this.image.imageNo = levelNo;
       this.image.onload = _ => {
         offscreenEl.width = canvasEl.width = canvasEl.style.maxWidth = this.image.width;
         offscreenEl.height = canvasEl.height = canvasEl.style.maxHeight = this.image.height;
@@ -141,6 +165,12 @@
 
       sensor.onactivate = () => this.render();
       sensor.start();
+    }
+
+    isWithinMaze(x, y) {
+      const padding = this.image.padding;
+      // console.log(padding + " " + x + " " + y + " " + this.image.imageNo);
+      return !(x < padding || y < padding || x > this.image.width - padding || y > this.image.height - padding)
     }
 
     collides() {
@@ -171,6 +201,23 @@
         this.x += pitch;
         while (this.collides()) {
           this.x -= Math.sign(pitch);
+        }
+      }
+
+      switch(this.state) {
+        case this.State.INITIAL: {
+          if (this.isWithinMaze(this.x, this.y)) {
+            this.state = this.State.ENTERED;
+            console.log("You entered, try finding the way to the exit");
+          }
+          break;
+        }
+        case this.State.ENTERED: {
+          if (!this.isWithinMaze(this.x, this.y)) {
+            this.state = this.State.EXITED;
+            console.log("You completed the maze, a-maze-ing!");
+          }
+          break;
         }
       }
 

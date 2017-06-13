@@ -25,7 +25,7 @@ handlers:
   secure: always
 
 - url: /icons
-  static_dir: levels
+  static_dir: icons
   secure: always
 
 - url: .*
